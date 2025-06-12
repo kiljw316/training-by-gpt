@@ -1,0 +1,2 @@
+### getPosts
+GET localhost:8080/posts
