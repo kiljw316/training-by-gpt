@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "post")
@@ -30,4 +32,8 @@ public class PostEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private PostStatusType status;
+
+    @OneToMany(mappedBy = "post")
+    private List<CommentEntity> comments;
+
 }
