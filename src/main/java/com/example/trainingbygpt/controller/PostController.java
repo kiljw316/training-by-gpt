@@ -1,11 +1,11 @@
 package com.example.trainingbygpt.controller;
 
 import com.example.trainingbygpt.dto.PostDto;
+import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +19,10 @@ public class PostController {
     @GetMapping
     public List<PostDto> getPosts() {
         return postService.getPosts();
+    }
+
+    @PostMapping
+    public PostDto savePost(@RequestBody @Valid PostSaveRequest request) {
+        return postService.savePost(request, 1L);
     }
 }
