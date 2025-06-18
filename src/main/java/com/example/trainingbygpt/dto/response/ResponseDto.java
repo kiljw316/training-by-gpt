@@ -7,6 +7,14 @@ import java.util.Collections;
 @Builder
 public record ResponseDto(int code, String message, Object result) {
 
+    public static ResponseDto ok(Object result) {
+        return ResponseDto.builder()
+            .code(200)
+            .message("success")
+            .result(result)
+            .build();
+    }
+
     public static ResponseDto created(Object result) {
         return ResponseDto.builder()
             .code(201)
