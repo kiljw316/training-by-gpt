@@ -2,12 +2,15 @@ package com.example.trainingbygpt.controller;
 
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
+import com.example.trainingbygpt.dto.response.ResponseDto;
 import com.example.trainingbygpt.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.trainingbygpt.dto.response.ResponseDto.created;
 
 @RestController
 @RequestMapping("posts")
@@ -22,7 +25,7 @@ public class PostController {
     }
 
     @PostMapping
-    public PostDto savePost(@RequestBody @Valid PostSaveRequest request) {
-        return postService.savePost(request, 1L);
+    public ResponseDto savePost(@RequestBody @Valid PostSaveRequest request) {
+        return created(postService.savePost(request, 1L));
     }
 }
