@@ -3,9 +3,11 @@ package com.example.trainingbygpt.entity;
 import com.example.trainingbygpt.type.PostStatusType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -36,4 +38,12 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    @Builder
+    public Post(User writer, String title, String content) {
+        this.user = writer;
+        this.title = title;
+        this.content = content;
+        this.status = PostStatusType.ACTIVE;
+        this.comments = new ArrayList<>();
+    }
 }

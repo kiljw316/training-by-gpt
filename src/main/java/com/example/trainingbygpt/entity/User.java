@@ -3,6 +3,7 @@ package com.example.trainingbygpt.entity;
 import com.example.trainingbygpt.type.RoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private RoleType role;
+
+    @Builder
+    public User(String username, RoleType role) {
+        this.username = username;
+        this.role = role;
+    }
 }

@@ -4,5 +4,5 @@ public interface PostProjection {
     Long getPostId();
     String getTitle();
     String getContent();
-    Long getCommentCount();
+    Integer getCommentCount();
 }
