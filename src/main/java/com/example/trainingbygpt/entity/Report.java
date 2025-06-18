@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "report")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReportEntity extends BaseEntity {
+public class Report extends BaseEntity {
 
     @Id
     @Column(name = "report_id")
@@ -19,7 +19,7 @@ public class ReportEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "target_type")

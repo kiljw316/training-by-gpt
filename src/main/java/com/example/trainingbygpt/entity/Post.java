@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostEntity extends BaseEntity {
+public class Post extends BaseEntity {
 
     @Id
     @Column(name = "post_id")
@@ -21,7 +21,7 @@ public class PostEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
 
     @Column(name = "title")
     private String title;
@@ -34,6 +34,6 @@ public class PostEntity extends BaseEntity {
     private PostStatusType status;
 
     @OneToMany(mappedBy = "post")
-    private List<CommentEntity> comments;
+    private List<Comment> comments;
 
 }

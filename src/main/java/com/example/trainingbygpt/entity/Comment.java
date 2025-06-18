@@ -1,6 +1,5 @@
 package com.example.trainingbygpt.entity;
 
-import com.example.trainingbygpt.type.TargetType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,23 +7,26 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "likes")
+@Table(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LikeEntity extends BaseEntity {
+public class Comment extends BaseEntity {
 
     @Id
-    @Column(name = "like_id")
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long commentId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "target_type")
-    private TargetType targetType;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name = "target_id")
-    private Long targetId;
+    @Column(name = "parent_id")
+    private Long parentId;
 }
