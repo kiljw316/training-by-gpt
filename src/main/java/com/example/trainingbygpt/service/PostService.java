@@ -1,5 +1,6 @@
 package com.example.trainingbygpt.service;
 
+import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.entity.Post;
@@ -27,6 +28,13 @@ public class PostService {
             .stream()
             .map(PostDto::from)
             .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PostDetailDto getPost(Long postId) {
+        return postRepository.findById(postId)
+            .map(PostDetailDto::from)
+            .orElseThrow();
     }
 
     @Transactional
