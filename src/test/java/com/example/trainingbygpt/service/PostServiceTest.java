@@ -1,5 +1,6 @@
 package com.example.trainingbygpt.service;
 
+import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.entity.Post;
@@ -19,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
@@ -73,6 +75,27 @@ class PostServiceTest {
         assertThat(post.getTitle()).isEqualTo("제목1");
         assertThat(post.getContent()).isEqualTo("내용1");
         assertThat(post.getCommentCount()).isEqualTo(1);
+    }
+
+    @Test
+    void 게시글_조회_성공() {
+        // given
+        String username = "유저 이름";
+
+        User writer = User.builder().username(username).role(RoleType.USER).build();
+        Post post = Post.builder().title("게시글 제목").content("게시글 내용").writer(writer).build();
+        when(postRepository.findById(any())).thenReturn(Optional.of(post));
+
+        // when
+        PostDetailDto result = postService.getPost(1L);
+
+        // then
+        assertThat(result.getTitle()).isEqualTo("게시글 제목");
+        assertThat(result.getContent()).isEqualTo("게시글 내용");
+        assertThat(result.getUsername()).isEqualTo(username);
+
+        // TODO 게시글 조회 테스트 방법 고민
+//        assertThat(result.getComments()).hasSize(1);
     }
 
     private List<PostProjection> createPosts() {
