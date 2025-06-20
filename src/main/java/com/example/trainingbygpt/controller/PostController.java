@@ -21,6 +21,11 @@ public class PostController {
         return ResponseDto.ok(postService.getPosts());
     }
 
+    @GetMapping("{postId}")
+    public ResponseDto getPost(@PathVariable Long postId) {
+        return ResponseDto.ok(postService.getPost(postId));
+    }
+
     @PostMapping
     public ResponseDto savePost(@RequestBody @Valid PostSaveRequest request) {
         return created(postService.savePost(request, 1L));
