@@ -3,6 +3,7 @@ package com.example.trainingbygpt.service;
 import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
+import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.entity.Post;
 import com.example.trainingbygpt.entity.User;
 import com.example.trainingbygpt.repository.PostRepository;
@@ -43,6 +44,13 @@ public class PostService {
             .title(request.getTitle())
             .content(request.getContent())
             .build());
+        return PostDetailDto.from(post);
+    }
+
+    @Transactional
+    public PostDetailDto updatePost(PostUpdateRequest request, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow();
+        post.update(request);
         return PostDetailDto.from(post);
     }
 }

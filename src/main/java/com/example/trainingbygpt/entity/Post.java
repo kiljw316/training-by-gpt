@@ -1,5 +1,6 @@
 package com.example.trainingbygpt.entity;
 
+import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.type.PostStatusType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -45,5 +46,10 @@ public class Post extends BaseEntity {
         this.content = content;
         this.status = PostStatusType.ACTIVE;
         this.comments = new ArrayList<>();
+    }
+
+    public void update(PostUpdateRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
     }
 }

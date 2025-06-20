@@ -3,6 +3,7 @@ package com.example.trainingbygpt.service;
 import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
+import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.entity.Post;
 import com.example.trainingbygpt.entity.User;
 import com.example.trainingbygpt.projection.PostProjection;
@@ -59,6 +60,31 @@ class PostServiceTest {
         assertThat(result.getContent()).isEqualTo(content);
         assertThat(result.getUsername()).isEqualTo(username);
         assertThat(result.getComments()).hasSize(0);
+    }
+
+    @Test
+    void 게시글_수정_성공() {
+        // given
+        PostUpdateRequest request = new PostUpdateRequest("변경된 제목", "변경된 내용");
+        Long postId = 100L;
+
+        String title = "게시글 제목";
+        String content = "게시글 내용";
+        String username = "테스트 유저";
+        User writer = User.builder().username(username).role(RoleType.USER).build();
+        Post post = Post.builder()
+            .writer(writer)
+            .title(title)
+            .content(content)
+            .build();
+        when(postRepository.findById(postId)).thenReturn(Optional.of(post));
+
+        // when
+        postService.updatePost(request, postId);
+
+        // then
+        assertThat(post.getTitle()).isEqualTo("변경된 제목");
+        assertThat(post.getContent()).isEqualTo("변경된 내용");
     }
 
     @Test
