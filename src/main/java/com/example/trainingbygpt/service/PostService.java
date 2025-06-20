@@ -48,7 +48,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostDetailDto updatePost(PostUpdateRequest request, Long postId) {
+    public PostDetailDto updatePost(Long postId, PostUpdateRequest request) {
         Post post = postRepository.findById(postId).orElseThrow();
         post.update(request);
         return PostDetailDto.from(post);

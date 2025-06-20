@@ -80,7 +80,7 @@ class PostServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.of(post));
 
         // when
-        postService.updatePost(request, postId);
+        postService.updatePost(postId, request);
 
         // then
         assertThat(post.getTitle()).isEqualTo("변경된 제목");

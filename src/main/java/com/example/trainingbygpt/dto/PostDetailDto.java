@@ -3,7 +3,6 @@ package com.example.trainingbygpt.dto;
 import com.example.trainingbygpt.entity.Post;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -17,7 +16,6 @@ public class PostDetailDto {
     private final String username;
 
     private final List<CommentDto> comments;
-    private final LocalDateTime modifiedAt;
 
     public static PostDetailDto from(Post post) {
         return new PostDetailDto(
@@ -26,8 +24,7 @@ public class PostDetailDto {
             post.getContent(),
             post.getUser().getUserId(),
             post.getUser().getUsername(),
-            post.getComments().stream().map(CommentDto::from).toList(),
-            post.getModifiedAt()
+            post.getComments().stream().map(CommentDto::from).toList()
         );
     }
 
@@ -36,14 +33,12 @@ public class PostDetailDto {
                           String content,
                           Long userId,
                           String username,
-                          List<CommentDto> comments,
-                          LocalDateTime modifiedAt) {
+                          List<CommentDto> comments) {
         this.postId = postId;
         this.title = title;
         this.content = content;
         this.userId = userId;
         this.username = username;
         this.comments = comments;
-        this.modifiedAt = modifiedAt;
     }
 }
