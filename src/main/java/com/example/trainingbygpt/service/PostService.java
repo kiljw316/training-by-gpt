@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.trainingbygpt.dto.PostDto.from;
-
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -38,13 +36,13 @@ public class PostService {
     }
 
     @Transactional
-    public PostDto savePost(PostSaveRequest request, Long userId) {
+    public PostDetailDto savePost(PostSaveRequest request, Long userId) {
         User writer = userRepository.findById(userId).orElseThrow();
         Post post = postRepository.save(Post.builder()
             .writer(writer)
             .title(request.getTitle())
             .content(request.getContent())
             .build());
-        return from(post);
+        return PostDetailDto.from(post);
     }
 }

@@ -40,8 +40,9 @@ class PostServiceTest {
         String content = "게시글 내용";
         PostSaveRequest request = new PostSaveRequest(title, content);
         Long userId = 100L;
+        String username = "테스트 유저";
 
-        User writer = User.builder().username("테스트 유저").role(RoleType.USER).build();
+        User writer = User.builder().username(username).role(RoleType.USER).build();
         when(userRepository.findById(userId)).thenReturn(Optional.of(writer));
         Post post = Post.builder()
             .writer(writer)
@@ -51,12 +52,13 @@ class PostServiceTest {
         when(postRepository.save(any())).thenReturn(post);
 
         // when
-        PostDto result = postService.savePost(request, userId);
+        PostDetailDto result = postService.savePost(request, userId);
 
         // then
         assertThat(result.getTitle()).isEqualTo(title);
         assertThat(result.getContent()).isEqualTo(content);
-        assertThat(result.getCommentCount()).isEqualTo(0);
+        assertThat(result.getUsername()).isEqualTo(username);
+        assertThat(result.getComments()).hasSize(0);
     }
 
     @Test
