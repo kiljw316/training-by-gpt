@@ -35,6 +35,45 @@ class PostServiceTest {
     private PostService postService;
 
     @Test
+    void 게시글_목록_조회_성공() {
+        // given
+        when(postRepository.findAllBy()).thenReturn(createPosts());
+
+        // when
+        List<PostDto> posts = postService.getPosts();
+
+        // then
+        assertThat(posts).hasSize(3);
+
+        PostDto post = posts.get(0);
+        assertThat(post.getPostId()).isEqualTo(1L);
+        assertThat(post.getTitle()).isEqualTo("제목1");
+        assertThat(post.getContent()).isEqualTo("내용1");
+        assertThat(post.getCommentCount()).isEqualTo(1);
+    }
+
+    @Test
+    void 게시글_조회_성공() {
+        // given
+        String username = "유저 이름";
+
+        User writer = User.builder().username(username).role(RoleType.USER).build();
+        Post post = Post.builder().title("게시글 제목").content("게시글 내용").writer(writer).build();
+        when(postRepository.findById(any())).thenReturn(Optional.of(post));
+
+        // when
+        PostDetailDto result = postService.getPost(1L);
+
+        // then
+        assertThat(result.getTitle()).isEqualTo("게시글 제목");
+        assertThat(result.getContent()).isEqualTo("게시글 내용");
+        assertThat(result.getUsername()).isEqualTo(username);
+
+        // TODO 게시글 조회 테스트 방법 고민
+//        assertThat(result.getComments()).hasSize(1);
+    }
+
+    @Test
     void 게시글_작성_성공() {
         // given
         String title = "게시글 제목";
@@ -85,45 +124,6 @@ class PostServiceTest {
         // then
         assertThat(post.getTitle()).isEqualTo("변경된 제목");
         assertThat(post.getContent()).isEqualTo("변경된 내용");
-    }
-
-    @Test
-    void 게시글_목록_조회_성공() {
-        // given
-        when(postRepository.findAllBy()).thenReturn(createPosts());
-
-        // when
-        List<PostDto> posts = postService.getPosts();
-
-        // then
-        assertThat(posts).hasSize(3);
-
-        PostDto post = posts.get(0);
-        assertThat(post.getPostId()).isEqualTo(1L);
-        assertThat(post.getTitle()).isEqualTo("제목1");
-        assertThat(post.getContent()).isEqualTo("내용1");
-        assertThat(post.getCommentCount()).isEqualTo(1);
-    }
-
-    @Test
-    void 게시글_조회_성공() {
-        // given
-        String username = "유저 이름";
-
-        User writer = User.builder().username(username).role(RoleType.USER).build();
-        Post post = Post.builder().title("게시글 제목").content("게시글 내용").writer(writer).build();
-        when(postRepository.findById(any())).thenReturn(Optional.of(post));
-
-        // when
-        PostDetailDto result = postService.getPost(1L);
-
-        // then
-        assertThat(result.getTitle()).isEqualTo("게시글 제목");
-        assertThat(result.getContent()).isEqualTo("게시글 내용");
-        assertThat(result.getUsername()).isEqualTo(username);
-
-        // TODO 게시글 조회 테스트 방법 고민
-//        assertThat(result.getComments()).hasSize(1);
     }
 
     private List<PostProjection> createPosts() {
