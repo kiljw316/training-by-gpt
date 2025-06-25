@@ -18,12 +18,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
+// TODO 테스트 실행 준비 코드 중복 제거
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
     @Mock
@@ -124,6 +126,35 @@ class PostServiceTest {
         // then
         assertThat(post.getTitle()).isEqualTo("변경된 제목");
         assertThat(post.getContent()).isEqualTo("변경된 내용");
+    }
+
+    @Test
+    void 게시글_삭제_실패_존재하지_않는_게시글() {
+        // given
+        when(postRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when - then
+        assertThatThrownBy(() -> postService.deletePost(1L))
+            .isExactlyInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void 게시글_삭제_성공() {
+        // given
+        Long postId = 100L;
+
+        Post post = Post.builder()
+            .writer(User.builder().username("테스트 유저").role(RoleType.USER).build())
+            .title("게시글 제목")
+            .content("게시글 내용")
+            .build();
+        when(postRepository.findById(postId)).thenReturn(Optional.of(post));
+
+        // when
+        postService.deletePost(postId);
+
+        // then
+        verify(postRepository, times(1)).delete(post);
     }
 
     private List<PostProjection> createPosts() {
