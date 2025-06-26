@@ -9,6 +9,7 @@ import com.example.trainingbygpt.entity.User;
 import com.example.trainingbygpt.projection.PostProjection;
 import com.example.trainingbygpt.repository.PostRepository;
 import com.example.trainingbygpt.repository.UserRepository;
+import com.example.trainingbygpt.type.PostStatusType;
 import com.example.trainingbygpt.type.RoleType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 // TODO 테스트 실행 준비 코드 중복 제거
 @ExtendWith(MockitoExtension.class)
@@ -154,7 +156,7 @@ class PostServiceTest {
         postService.deletePost(postId);
 
         // then
-        verify(postRepository, times(1)).delete(post);
+        assertThat(post.getStatus()).isEqualTo(PostStatusType.DELETED);
     }
 
     private List<PostProjection> createPosts() {

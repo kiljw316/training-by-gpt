@@ -31,6 +31,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostDetailDto getPost(Long postId) {
+        // TODO soft delete 된 게시글 제외 조건 추가
         return postRepository.findById(postId)
             .map(PostDetailDto::from)
             .orElseThrow();
@@ -57,6 +58,6 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
-        postRepository.delete(post);
+        post.delete();
     }
 }

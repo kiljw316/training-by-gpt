@@ -52,4 +52,8 @@ public class Post extends BaseEntity {
         this.title = request.getTitle();
         this.content = request.getContent();
     }
+
+    public void delete() {
+        this.status = PostStatusType.DELETED;
+    }
 }
