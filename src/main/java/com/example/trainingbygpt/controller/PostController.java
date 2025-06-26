@@ -8,8 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.trainingbygpt.dto.response.ResponseDto.created;
-import static com.example.trainingbygpt.dto.response.ResponseDto.ok;
+import static com.example.trainingbygpt.dto.response.ResponseDto.*;
 
 @RestController
 @RequestMapping("posts")
@@ -33,14 +32,15 @@ public class PostController {
         return ok(postService.getPost(postId));
     }
 
-    @PostMapping
-    public ResponseDto savePost(@RequestBody @Valid PostSaveRequest request) {
-        return created(postService.savePost(request, 1L));
-    }
-
     @PutMapping("{postId}")
     public ResponseDto updatePost(@PathVariable Long postId,
                                   @RequestBody @Valid PostUpdateRequest request) {
         return ok(postService.updatePost(postId, request));
+    }
+
+    @DeleteMapping("{postId}")
+    public ResponseDto deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+        return noContent();
     }
 }

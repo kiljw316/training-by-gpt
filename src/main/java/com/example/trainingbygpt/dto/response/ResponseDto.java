@@ -30,4 +30,12 @@ public record ResponseDto(int code, String message, Object result) {
             .result(Collections.EMPTY_MAP)
             .build();
     }
+
+    public static ResponseDto noContent() {
+        return ResponseDto.builder()
+            .code(204)
+            .message("success")
+            .result(Collections.EMPTY_MAP)
+            .build();
+    }
 }
