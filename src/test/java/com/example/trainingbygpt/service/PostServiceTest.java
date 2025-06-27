@@ -167,11 +167,11 @@ class PostServiceTest {
         when(commentRepository.save(any())).thenReturn(comment);
 
         // when
-        CommentDto commentDto = postService.saveComment(request, 1L, 1L);
+        CommentDto result = postService.saveComment(request, 1L, 1L);
 
         // then
-        assertThat(commentDto.getContent()).isEqualTo(commentContent);
-        assertThat(commentDto.getUsername()).isEqualTo(username);
+        assertThat(result.getContent()).isEqualTo(commentContent);
+        assertThat(result.getUsername()).isEqualTo(username);
     }
 
     private List<PostProjection> createPosts() {

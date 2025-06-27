@@ -32,7 +32,8 @@ public class Comment extends BaseEntity {
     private Long parentId;
 
     @Builder
-    public Comment(Post post, User user, String content, Long parentId) {
+    public Comment(Long commentId, Post post, User user, String content, Long parentId) {
+        this.commentId = commentId;
         this.post = post;
         this.user = user;
         this.content = content;
