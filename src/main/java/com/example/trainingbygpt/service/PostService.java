@@ -8,6 +8,7 @@ import com.example.trainingbygpt.entity.Post;
 import com.example.trainingbygpt.entity.User;
 import com.example.trainingbygpt.repository.PostRepository;
 import com.example.trainingbygpt.repository.UserRepository;
+import com.example.trainingbygpt.type.PostStatusType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostDto> getPosts() {
-        return postRepository.findAllBy()
+        return postRepository.findAllByStatus(PostStatusType.ACTIVE)
             .stream()
             .map(PostDto::from)
             .toList();
@@ -31,8 +32,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostDetailDto getPost(Long postId) {
-        // TODO soft delete 된 게시글 제외 조건 추가
-        return postRepository.findById(postId)
+        return postRepository.findByPostIdAndStatus(postId, PostStatusType.ACTIVE)
             .map(PostDetailDto::from)
             .orElseThrow();
     }

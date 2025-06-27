@@ -53,7 +53,7 @@ class PostServiceTest {
     @Test
     void 게시글_목록_조회_성공() {
         // given
-        when(postRepository.findAllBy()).thenReturn(createPosts());
+        when(postRepository.findAllByStatus(PostStatusType.ACTIVE)).thenReturn(createPosts());
 
         // when
         List<PostDto> posts = postService.getPosts();
@@ -71,10 +71,11 @@ class PostServiceTest {
     @Test
     void 게시글_조회_성공() {
         // given
-        when(postRepository.findById(any())).thenReturn(Optional.of(post));
+        Long postId = 1L;
+        when(postRepository.findByPostIdAndStatus(postId, PostStatusType.ACTIVE)).thenReturn(Optional.of(post));
 
         // when
-        PostDetailDto result = postService.getPost(1L);
+        PostDetailDto result = postService.getPost(postId);
 
         // then
         assertThat(result.getTitle()).isEqualTo(title);
