@@ -1,5 +1,6 @@
 package com.example.trainingbygpt.controller;
 
+import com.example.trainingbygpt.dto.request.CommentSaveRequest;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.dto.response.ResponseDto;
@@ -42,5 +43,11 @@ public class PostController {
     public ResponseDto deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return noContent();
+    }
+
+    @PostMapping("{postId}/comments")
+    public ResponseDto saveComment(@PathVariable Long postId,
+                                   @RequestBody @Valid CommentSaveRequest request) {
+        return ok(postService.saveComment(request, 1L, postId));
     }
 }
