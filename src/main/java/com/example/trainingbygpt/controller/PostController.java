@@ -48,6 +48,6 @@ public class PostController {
     @PostMapping("{postId}/comments")
     public ResponseDto saveComment(@PathVariable Long postId,
                                    @RequestBody @Valid CommentSaveRequest request) {
-        return ok(postService.saveComment(request, 1L, postId));
+        return created(postService.saveComment(request, 1L, postId));
     }
 }
