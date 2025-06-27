@@ -2,6 +2,7 @@ package com.example.trainingbygpt.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,12 @@ public class Comment extends BaseEntity {
 
     @Column(name = "parent_id")
     private Long parentId;
+
+    @Builder
+    public Comment(Post post, User user, String content, Long parentId) {
+        this.post = post;
+        this.user = user;
+        this.content = content;
+        this.parentId = parentId;
+    }
 }
