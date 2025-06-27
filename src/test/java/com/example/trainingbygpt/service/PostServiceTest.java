@@ -11,6 +11,7 @@ import com.example.trainingbygpt.repository.PostRepository;
 import com.example.trainingbygpt.repository.UserRepository;
 import com.example.trainingbygpt.type.PostStatusType;
 import com.example.trainingbygpt.type.RoleType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-// TODO 테스트 실행 준비 코드 중복 제거
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
     @Mock
@@ -37,6 +37,18 @@ class PostServiceTest {
 
     @InjectMocks
     private PostService postService;
+
+    private final String title = "게시글 제목";
+    private final String content = "게시글 내용";
+    private final String username = "홍길동";
+    private Post post;
+    private User writer;
+
+    @BeforeEach
+    void setUp() {
+        writer = User.builder().username(username).role(RoleType.USER).build();
+        post = Post.builder().title(title).content(content).writer(writer).build();
+    }
 
     @Test
     void 게시글_목록_조회_성공() {
@@ -59,18 +71,14 @@ class PostServiceTest {
     @Test
     void 게시글_조회_성공() {
         // given
-        String username = "유저 이름";
-
-        User writer = User.builder().username(username).role(RoleType.USER).build();
-        Post post = Post.builder().title("게시글 제목").content("게시글 내용").writer(writer).build();
         when(postRepository.findById(any())).thenReturn(Optional.of(post));
 
         // when
         PostDetailDto result = postService.getPost(1L);
 
         // then
-        assertThat(result.getTitle()).isEqualTo("게시글 제목");
-        assertThat(result.getContent()).isEqualTo("게시글 내용");
+        assertThat(result.getTitle()).isEqualTo(title);
+        assertThat(result.getContent()).isEqualTo(content);
         assertThat(result.getUsername()).isEqualTo(username);
 
         // TODO 게시글 조회 테스트 방법 고민
@@ -80,19 +88,10 @@ class PostServiceTest {
     @Test
     void 게시글_작성_성공() {
         // given
-        String title = "게시글 제목";
-        String content = "게시글 내용";
         PostSaveRequest request = new PostSaveRequest(title, content);
         Long userId = 100L;
-        String username = "테스트 유저";
 
-        User writer = User.builder().username(username).role(RoleType.USER).build();
         when(userRepository.findById(userId)).thenReturn(Optional.of(writer));
-        Post post = Post.builder()
-            .writer(writer)
-            .title(title)
-            .content(content)
-            .build();
         when(postRepository.save(any())).thenReturn(post);
 
         // when
@@ -111,15 +110,6 @@ class PostServiceTest {
         PostUpdateRequest request = new PostUpdateRequest("변경된 제목", "변경된 내용");
         Long postId = 100L;
 
-        String title = "게시글 제목";
-        String content = "게시글 내용";
-        String username = "테스트 유저";
-        User writer = User.builder().username(username).role(RoleType.USER).build();
-        Post post = Post.builder()
-            .writer(writer)
-            .title(title)
-            .content(content)
-            .build();
         when(postRepository.findById(postId)).thenReturn(Optional.of(post));
 
         // when
@@ -145,11 +135,6 @@ class PostServiceTest {
         // given
         Long postId = 100L;
 
-        Post post = Post.builder()
-            .writer(User.builder().username("테스트 유저").role(RoleType.USER).build())
-            .title("게시글 제목")
-            .content("게시글 내용")
-            .build();
         when(postRepository.findById(postId)).thenReturn(Optional.of(post));
 
         // when
