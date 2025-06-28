@@ -1,9 +1,11 @@
 package com.example.trainingbygpt.service;
 
 import com.example.trainingbygpt.dto.CommentDto;
+import com.example.trainingbygpt.dto.CommentsDto;
 import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.CommentSaveRequest;
+import com.example.trainingbygpt.dto.request.CommentsRequest;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.entity.Comment;
@@ -21,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,6 +178,27 @@ class PostServiceTest {
         assertThat(result.getUsername()).isEqualTo(username);
     }
 
+    @Test
+    void 댓글_조회_성공() {
+        // given
+        int pageSize = 2;
+        CommentsRequest request = new CommentsRequest(0, pageSize);
+        Long postId = 100L;
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+        int totalCount = 3;
+
+        when(postRepository.findById(postId)).thenReturn(Optional.of(post));
+        when(commentRepository.findByPost(post, pageRequest))
+            .thenReturn(new PageImpl<>(createComments(post, writer, pageSize), pageRequest, totalCount));
+
+        // when
+        CommentsDto comments = postService.getComments(request, postId);
+
+        // then
+        assertThat(comments.getComments()).hasSize(pageSize);
+        assertThat(comments.getTotalCount()).isEqualTo(totalCount);
+    }
+
     private List<PostProjection> createPosts() {
         List<PostProjection> posts = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
@@ -201,5 +226,14 @@ class PostServiceTest {
             });
         }
         return posts;
+    }
+
+    private List<Comment> createComments(Post post, User writer, int size) {
+        List<Comment> comments = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            Comment comment = Comment.builder().commentId((long) (i + 1)).user(writer).post(post).content("댓글 내용" + i).build();
+            comments.add(comment);
+        }
+        return comments;
     }
 }

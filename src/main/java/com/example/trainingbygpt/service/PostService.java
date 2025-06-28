@@ -1,9 +1,11 @@
 package com.example.trainingbygpt.service;
 
 import com.example.trainingbygpt.dto.CommentDto;
+import com.example.trainingbygpt.dto.CommentsDto;
 import com.example.trainingbygpt.dto.PostDetailDto;
 import com.example.trainingbygpt.dto.PostDto;
 import com.example.trainingbygpt.dto.request.CommentSaveRequest;
+import com.example.trainingbygpt.dto.request.CommentsRequest;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.entity.Comment;
@@ -14,6 +16,8 @@ import com.example.trainingbygpt.repository.PostRepository;
 import com.example.trainingbygpt.repository.UserRepository;
 import com.example.trainingbygpt.type.PostStatusType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,5 +79,14 @@ public class PostService {
             .build());
 
         return CommentDto.from(comment);
+    }
+
+    @Transactional(readOnly = true)
+    public CommentsDto getComments(CommentsRequest request, Long postId) {
+        // TODO 대댓글 구성
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+        Post post = postRepository.findById(postId).orElseThrow();
+        Page<Comment> commentsPage = commentRepository.findByPost(post, pageRequest);
+        return CommentsDto.from(commentsPage.getContent(), commentsPage.getTotalElements());
     }
 }
