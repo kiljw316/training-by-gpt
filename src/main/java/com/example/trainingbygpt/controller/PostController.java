@@ -1,6 +1,7 @@
 package com.example.trainingbygpt.controller;
 
 import com.example.trainingbygpt.dto.request.CommentSaveRequest;
+import com.example.trainingbygpt.dto.request.CommentsRequest;
 import com.example.trainingbygpt.dto.request.PostSaveRequest;
 import com.example.trainingbygpt.dto.request.PostUpdateRequest;
 import com.example.trainingbygpt.dto.response.ResponseDto;
@@ -49,5 +50,11 @@ public class PostController {
     public ResponseDto saveComment(@PathVariable Long postId,
                                    @RequestBody @Valid CommentSaveRequest request) {
         return created(postService.saveComment(request, 1L, postId));
+    }
+
+    @GetMapping("{postId}/comments")
+    public ResponseDto getComments(@PathVariable Long postId,
+                                   @RequestBody @Valid CommentsRequest request) {
+        return ok(postService.getComments(request, postId));
     }
 }
