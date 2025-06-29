@@ -3,6 +3,7 @@ package com.example.trainingbygpt.entity;
 import com.example.trainingbygpt.type.TargetType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,19 @@ public class Like extends BaseEntity {
 
     @Column(name = "target_id")
     private Long targetId;
+
+    public static Like ofPost(User user, Long postId) {
+        return Like.builder()
+            .user(user)
+            .targetType(TargetType.POST)
+            .targetId(postId)
+            .build();
+    }
+
+    @Builder
+    private Like(User user, TargetType targetType, Long targetId) {
+        this.user = user;
+        this.targetType = targetType;
+        this.targetId = targetId;
+    }
 }

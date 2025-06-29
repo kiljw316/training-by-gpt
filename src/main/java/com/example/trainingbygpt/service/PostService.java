@@ -12,6 +12,7 @@ import com.example.trainingbygpt.entity.Comment;
 import com.example.trainingbygpt.entity.Post;
 import com.example.trainingbygpt.entity.User;
 import com.example.trainingbygpt.repository.CommentRepository;
+import com.example.trainingbygpt.repository.LikeRepository;
 import com.example.trainingbygpt.repository.PostRepository;
 import com.example.trainingbygpt.repository.UserRepository;
 import com.example.trainingbygpt.type.PostStatusType;
@@ -30,6 +31,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+
+    private final LikeService likeService;
 
     @Transactional(readOnly = true)
     public List<PostDto> getPosts() {
@@ -88,5 +91,11 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow();
         Page<Comment> commentsPage = commentRepository.findByPost(post, pageRequest);
         return CommentsDto.from(commentsPage.getContent(), commentsPage.getTotalElements());
+    }
+
+    @Transactional
+    public void likePost(Long userId, Long postId) {
+        // TODO 게시글에 좋아요 수 표시
+        likeService.likePost(userId, postId);
     }
 }
