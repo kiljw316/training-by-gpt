@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class LikeService {
@@ -24,5 +26,15 @@ public class LikeService {
             throw new IllegalArgumentException("already liked post");
         }
         likeRepository.save(Like.ofPost(user, postId));
+    }
+
+    @Transactional
+    public void unlikePost(Long userId, Long postId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Optional<Like> likeOptional = likeRepository.findByUserAndTargetTypeAndTargetId(user, TargetType.POST, postId);
+        if (likeOptional.isEmpty()) {
+            return;
+        }
+        likeRepository.delete(likeOptional.get());
     }
 }
