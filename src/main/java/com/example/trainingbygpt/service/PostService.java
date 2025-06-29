@@ -98,4 +98,9 @@ public class PostService {
         // TODO 게시글에 좋아요 수 표시
         likeService.likePost(userId, postId);
     }
+
+    @Transactional
+    public void unlikePost(Long userId, Long postId) {
+        likeService.unlikePost(userId, postId);
+    }
 }

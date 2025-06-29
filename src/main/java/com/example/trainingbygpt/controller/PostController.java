@@ -63,4 +63,10 @@ public class PostController {
         postService.likePost(1L, postId);
         return noContent();
     }
+
+    @DeleteMapping("{postId}/likes")
+    public ResponseDto unlikePost(@PathVariable Long postId) {
+        postService.unlikePost(1L, postId);
+        return noContent();
+    }
 }
