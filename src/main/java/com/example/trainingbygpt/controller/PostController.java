@@ -57,4 +57,10 @@ public class PostController {
                                    @RequestBody @Valid CommentsRequest request) {
         return ok(postService.getComments(request, postId));
     }
+
+    @PostMapping("{postId}/likes")
+    public ResponseDto likePost(@PathVariable Long postId) {
+        postService.likePost(1L, postId);
+        return noContent();
+    }
 }
